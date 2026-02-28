@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carnet de Voyage de Raelith</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=MedievalSharp&family=Rock+Salt&display=swap" rel="stylesheet">
+    
+    <style>
+        /* =========================================
+           1. IMPORTATION DES POLICES PERSONNALISÉES
+           ========================================= */
+        @font-face {
+            font-family: 'i_mWeird';
+            src: url('ttf/i_mWeird.ttf') format('truetype'); 
+        }
+        @font-face {
+            font-family: 'ShonenPunk';
+            src: url('ttf/ShonenPunk custom bold.ttf') format('truetype'); 
+        }
+        
+        /* =========================================
+           2. STYLE GÉNÉRAL DE LA PAGE WEB
+           ========================================= */
+        body {
+            background-color: #1a1a1a;
+            background-image: radial-gradient(circle at center, #2a2a2a, #0a0a0a);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; 
+            margin: 0;
+            font-family: 'i_mWeird', cursive;
+            color: #3e2723;
+            overflow: hidden; 
+        }
+
+        /* =========================================
+           3. STRUCTURE 3D DU LIVRE
+           ========================================= */
+        .book-container {
+            perspective: 2000px;
+            position: relative;
+        }
+
+        .book {
+            width: 340px;
+            height: 480px;
+            position: relative;
+            transform-style: preserve-3d; 
+        }
+
+        /* Feuilles qui dépassent */
+        .book::after, .book::before {
+            content: '';
+            position: absolute;
+            top: 5px; 
+            left: 10px;
+            width: 98%;
+            height: 98%;
+            background: #f4e8d0; 
+            z-index: -1; 
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.4); 
+        }
+        .book::after { transform: rotate(1.5deg) translate(5px, 5px); }
+        .book::before { z-index: -2; background: #eee0c8; transform: rotate(-1deg) translate(8px, 10px); }
+
+        /* =========================================
+           4. STRUCTURE ET ANIMATION DES PAGES
+           ========================================= */
+        .page {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0; left: 0;
+            transform-origin: left center;
+            transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+            transform-style: preserve-3d;
+            cursor: pointer; 
+            border-radius: 4px 12px 12px 4px; 
+        }
+
+        .front, .back {
+            position: absolute;
+            width: 100%; height: 100%;
+            backface-visibility: hidden; 
+            box-sizing: border-box;
+            padding: 20px 15px; 
+            overflow: hidden;
+            border-radius: 4px 12px 12px 4px; 
+        }
+
+        .back {
+            transform: rotateY(180deg);
+            border-radius: 12px 4px 4px 12px; 
+        }
+
+        /* =========================================
+           5. LE DESIGN DE LA COUVERTURE
+           ========================================= */
+        .cover .front {
+            background-color: #4e342e; 
+            background-image: url('https://www.transparenttextures.com/patterns/white-leather.png');
+            background-blend-mode: multiply; 
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.7), 5px 5px 20px rgba(0,0,0,0.5);
+            display: block; 
+        }
+
+        /* Terre */
+        .cover .front::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url('img/dirt-texture.png'); 
+            background-size: cover;
+            opacity: 0.4;
+            mix-blend-mode: multiply;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .cover .back {
+            background-color: #4e342e;
+            background-image: url('https://www.transparenttextures.com/patterns/white-leather.png');
+            background-blend-mode: multiply;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .cover h1 {
+            font-family: 'ShonenPunk'; 
+            color: #1a120f;
+            margin: 0;
+            font-size: 32px; 
+            transform: rotate(-7deg); 
+            position: absolute;
+            bottom: 50px;
+            right: 40px;
+            text-align: right;
+            text-shadow: 
+                1px 1px 1px rgba(255, 230, 200, 0.3), 
+                -1px -1px 1px rgba(0,0,0,0.8),        
+                0 0 3px rgba(0,0,0,0.5);              
+            opacity: 0.9;
+            z-index: 2; /* IMPORTANT : Assure que le texte reste au-dessus de la terre */
+        }
+
+        /* =========================================
+           6. LE DESIGN DES PAGES INTÉRIEURES
+           ========================================= */
+        .inner-page .front, .inner-page .back {
+            background-color: #f4e8d0; 
+            background-image: url('https://www.transparenttextures.com/patterns/aged-paper.png'), radial-gradient(ellipse at center, transparent 50%, rgba(139, 69, 19, 0.2) 100%);
+            box-shadow: inset 3px 0 15px rgba(139, 69, 19, 0.3);
+        }
+
+        .inner-page h2 { 
+            font-family: 'i_mWeird', serif; 
+            padding-bottom: 10px; 
+            font-size: 24px; 
+            margin-top: 0; 
+            color: #5d4037;
+        }
+        
+        .inner-page p, .inner-page li { 
+            font-size: 17px; 
+            line-height: 1.6; 
+        }
+
+        .inner-page-civeth p { 
+            font-size: 13px; 
+            line-height: 1.2; 
+            position: absolute;     
+            top: 80px;
+            right: 20px;
+            margin: 0;
+            transform: rotate(-4deg);
+        }
+
+        .inner-page-valentia p { 
+            font-size: 13px; 
+            line-height: 1.2; 
+            position: absolute;     
+            top: 230px;
+            left: 20px;
+            margin: 0;
+            transform: rotate(-6deg);
+        }
+
+        .inner-page-zyz p { 
+            font-size: 13px; 
+            line-height: 1.2; 
+            position: absolute;     
+            bottom: 10px;              
+            right: 40px;
+            margin: 0;
+            transform: rotate(-6deg);
+        }
+
+        .image-croquis-zyz {
+            width: 120px;           
+            position: absolute;     
+            bottom: 30px; 
+            right: 40px;
+            transform: rotate(-4deg);
+            opacity: 0.85;
+            mix-blend-mode: multiply; 
+            pointer-events: none;   
+        }
+        .image-croquis-cyveth {
+            width: 140px;           
+            position: absolute;     
+            top: 100px;
+            right: 20px;
+            transform: rotate(8deg);
+            opacity: 0.85;
+            mix-blend-mode: multiply; 
+            pointer-events: none;   
+        }
+        .image-croquis-valentia {
+            width: 120px;           
+            position: absolute;     
+            top: 30px;
+            left: 20px;
+            transform: rotate(-6deg);
+            opacity: 0.85;
+            mix-blend-mode: multiply; 
+            pointer-events: none;   
+        }
+        .image-croquis-raelith {
+            width: 90px;           
+            position: absolute;     
+            top: 20px;
+            right: 10px;
+            transform: rotate(-5deg);
+            opacity: 0.85;
+            mix-blend-mode: multiply; 
+            pointer-events: none;   
+        }
+        .image-croquis-cariole {
+            width: 150px;           
+            position: absolute;     
+            bottom: 15px; 
+            right: 30px;
+            transform: rotate(-4deg);
+            opacity: 0.85;
+            mix-blend-mode: multiply; 
+            pointer-events: none;  
+        }
+    
+        /* =========================================
+           7. UTILITAIRES ET EFFETS VISUELS
+           ========================================= */
+        .flipped { 
+            transform: rotateY(-180deg); 
+        }
+
+        .front::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 30px; background: linear-gradient(to right, rgba(40, 25, 20, 0.6), transparent); z-index: 2; pointer-events: none;}
+        .back::before { content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 30px; background: linear-gradient(to left, rgba(40, 25, 20, 0.6), transparent); z-index: 2; pointer-events: none;}
+
+    </style>
+</head>
+<body>
+
+    <div class="book-container">
+        
+        <div class="book" id="book">
+
+            <div class="page inner-page">
+                <div class="front">
+                    <h2>A remplir</h2>
+                    <p>A remplir</p>
+                </div>
+                <div class="back" style="display:flex; justify-content:center; align-items:center;">
+                   <p style="color: #a08a70; font-style: italic;">Fin des notes</p>
+                </div>
+            </div>
+            
+            <div class="page inner-page">
+                <div class="front">
+                    <div class="inner-page-civeth">
+                       <p>Civet <s>Keudekoton</s> le menteur !</p>
+                    </div>
+                    <div class="inner-page-valentia">
+                       <p>Valentia la dent morte</p>
+                    </div>
+                    <div class="inner-page-zyz">
+                       <p>Zyz le puant gobelin</p>
+                    </div>       
+                    <img src="img/zyz.png" class="image-croquis-zyz">
+                    <img src="img/civeth.png" class="image-croquis-cyveth">
+                    <img src="img/Valencia.png" class="image-croquis-valentia">
+                </div>
+                <div class="back">
+                    <h2>Le depar !</h2>
+                    <p>Nou sommes parti vers fandanyl, je sui sur le beuf, ca me fatigue pa comme ca ! </p>
+                </div>
+            </div>
+
+            <div class="page inner-page">
+                <div class="front">
+                    <img src="img/Raelith.png" class="image-croquis-raelith">
+                    <h2>Mon preumier voyage</h2>
+                    <p>Je vais tou noter pour pas oublier</p>
+                    <p>Jai rencontrer une personne el sapel Cherchepierre, je pense quil aime les pierres com moi !</p>
+                    <p>il a promi de me donner des pierres si je ramen un chariot avec des gens juska Fen .. Fenda ? Fandanyl !</p>
+                    <img src="img/cariole.png" class="image-croquis-cariole">
+                    <p>je vous presenteu mes gens avek moi juste apre !</p>
+                </div>
+                <div class="back">
+                    <h2>Les gen avek moi</h2>
+                    <ul style="position: relative;">
+                        <li>Civeth <s>Keu de Koton</s> ! C un lapun geant qui es pirat ! Il et <s>gentil</s> mechan</li>
+                        
+                        <p style="position: absolute; top: -30px; left: 70px; font-family: 'i_mWeird', cursive; font-size: 15px; color: #8b0000; transform: rotate(-5deg); margin: 0;">MENTEUR ! C pas keu de koton !</p>
+                        
+                        <li>Myriel ! C kom le soleil, el brille plus que mes pierres !</li>
+                        <li>Ya aussi Valencia ! C un Dent pire, je pense kel doi pas avoir de bonne dents.. El le cache sous une grand tenu toute noire</li>
+                        <li>Le dernie c Zyz, lui il es comme Raelith, petit mai malun ! Mai il faudrai kil se lave</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="page cover">
+                <div class="front">
+                    <h1>RAELITH</h1>
+                </div>
+                <div class="back">
+                    <p style="color: #cbb396;">Raelith eiga !<br>Uat grípa !</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const pages = document.querySelectorAll('.page');
+        const pagesArray = Array.from(pages).reverse();
+
+        pagesArray.forEach((page, index) => {
+            page.style.zIndex = pagesArray.length - index;
+            page.addEventListener('click', function() {
+                if (index === pagesArray.length - 1) { return; }
+                
+                if (this.classList.contains('flipped')) {
+                    this.classList.remove('flipped');
+                    setTimeout(() => { this.style.zIndex = pagesArray.length - index; }, 400); 
+                } else {
+                    this.classList.add('flipped');
+                    setTimeout(() => { this.style.zIndex = index + 1; }, 400);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
