@@ -36,6 +36,7 @@
         .book-container {
             perspective: 2000px;
             position: relative;
+            transform: scale(1.4);
         }
 
         .book {
@@ -178,6 +179,15 @@
             margin: 0;
             transform: rotate(-6deg);
         }
+        .inner-page-myriel p { 
+            font-size: 14px; 
+            line-height: 1.2; 
+            position: absolute;     
+            bottom: 40px;
+            left: 40px;
+            margin: 0;
+            transform: rotate(-6deg);
+        }
 
         .inner-page-zyz p { 
             font-size: 13px; 
@@ -215,6 +225,16 @@
             top: 30px;
             left: 20px;
             transform: rotate(-6deg);
+            opacity: 0.85;
+            mix-blend-mode: multiply; 
+            pointer-events: none;   
+        }
+        .image-croquis-myriel {
+            width: 180px;           
+            position: absolute;     
+            bottom: 60px;
+            left: 20px;
+            transform: rotate(-8deg);
             opacity: 0.85;
             mix-blend-mode: multiply; 
             pointer-events: none;   
@@ -274,12 +294,16 @@
                     <div class="inner-page-valentia">
                        <p>Valentia la dent morte</p>
                     </div>
+                    <div class="inner-page-myriel">
+                       <p>Myriel le soleil</p>
+                    </div>
                     <div class="inner-page-zyz">
                        <p>Zyz le puant gobelin</p>
                     </div>       
                     <img src="img/zyz.png" class="image-croquis-zyz">
                     <img src="img/civeth.png" class="image-croquis-cyveth">
                     <img src="img/valencia.png" class="image-croquis-valentia">
+                    <img src="img/myriel.png" class="image-croquis-myriel">
                 </div>
                 <div class="back">
                     <h2>Le depar !</h2>
