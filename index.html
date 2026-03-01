@@ -8,23 +8,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=MedievalSharp&family=Rock+Salt&display=swap" rel="stylesheet">
     
     <style>
-        /* =========================================
-           1. IMPORTATION DES POLICES PERSONNALISÉES
-           ========================================= */
+        /* Les polices*/
         @font-face {
             font-family: 'i_mWeird';
-            /* ATTENTION : .TTF en majuscules comme ton fichier ! */
             src: url('ttf/i_mWeird.TTF') format('truetype'); 
         }
         @font-face {
             font-family: 'ShonenPunk';
-            /* ATTENTION : Les espaces sont remplacés par %20 pour GitHub ! */
             src: url('ttf/ShonenPunk%20custom%20bold.ttf') format('truetype'); 
         }
         
-        /* =========================================
-           2. STYLE GÉNÉRAL DE LA PAGE WEB
-           ========================================= */
+        /* Style de page */
         body {
             background-color: #1a1a1a;
             background-image: radial-gradient(circle at center, #2a2a2a, #0a0a0a);
@@ -38,9 +32,7 @@
             overflow: hidden; 
         }
 
-        /* =========================================
-           3. STRUCTURE 3D DU LIVRE
-           ========================================= */
+        /* Structure 3D */
         .book-container {
             perspective: 2000px;
             position: relative;
@@ -68,9 +60,7 @@
         .book::after { transform: rotate(1.5deg) translate(5px, 5px); }
         .book::before { z-index: -2; background: #eee0c8; transform: rotate(-1deg) translate(8px, 10px); }
 
-        /* =========================================
-           4. STRUCTURE ET ANIMATION DES PAGES
-           ========================================= */
+        /* Structure + animation page */
         .page {
             width: 100%;
             height: 100%;
@@ -98,9 +88,7 @@
             border-radius: 12px 4px 4px 12px; 
         }
 
-        /* =========================================
-           5. LE DESIGN DE LA COUVERTURE
-           ========================================= */
+        /* Design de la couverture*/
         .cover .front {
             background-color: #4e342e; 
             background-image: url('https://www.transparenttextures.com/patterns/white-leather.png');
@@ -151,9 +139,7 @@
             z-index: 2; 
         }
 
-        /* =========================================
-           6. LE DESIGN DES PAGES INTÉRIEURES
-           ========================================= */
+        /* Design page interieur*/
         .inner-page .front, .inner-page .back {
             background-color: #f4e8d0; 
             background-image: url('https://www.transparenttextures.com/patterns/aged-paper.png'), radial-gradient(ellipse at center, transparent 50%, rgba(139, 69, 19, 0.2) 100%);
@@ -254,9 +240,7 @@
             pointer-events: none;  
         }
     
-        /* =========================================
-           7. UTILITAIRES ET EFFETS VISUELS
-           ========================================= */
+        /* Visuels */
         .flipped { 
             transform: rotateY(-180deg); 
         }
